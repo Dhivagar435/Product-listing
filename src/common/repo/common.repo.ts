@@ -1,7 +1,7 @@
 import { injectable } from "tsyringe";
 import { AppDataSource } from "../../config/data-source";
 import { QueryRunner } from "typeorm";
-import { Staff } from "../../superAdmin/staff/entity/StaffEntity";
+
 
 @injectable()
 export class CommonRepository {
@@ -29,25 +29,4 @@ export class CommonRepository {
     const rows = await manager.query(query, values);
     return rows[0] || null;
   }
-
-
-  async findByIdempotency(
-    tableName: string,
-    key: string,
-    queryRunner?: QueryRunner
-  ): Promise<any | null> {
-
-    const manager = queryRunner ? queryRunner.manager : AppDataSource.manager;
-
-    const query = `
-    SELECT *
-    FROM ${tableName}
-    WHERE idempotency = ?
-    LIMIT 1
-  `;
-
-    const rows = await manager.query(query, [key]);
-    return rows[0] || null;
-  }
-
 }

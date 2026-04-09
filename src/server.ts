@@ -10,8 +10,6 @@ const IP = String(process.env.IP);
 
 const startServer = async () => {
   try {
-    //Connect Redis first
-
 
     //Connect DB
     await AppDataSource.initialize();

@@ -1,52 +1,20 @@
 import { container } from "tsyringe";
 import { CommonRepository } from "../common/repo/common.repo";
-import { AddStaffController } from "../superAdmin/staff/controller/Staff.controller";
-import { AddStaffService } from "../superAdmin/staff/service/Staff.service";
-import { StaffRepository } from "../superAdmin/staff/repository/Staff.repo";
-import { StaffCodeGenerator } from "../staffCodeGenerator/staffCodeGenrator";
-import { EmailService } from "../utils/email/SendEmail";
 import { GlobalException } from "../constant/GlobalExpection";
-
-import { StudentController } from "../superAdmin/student/controller/Student.controller";
-import { StudentService } from "../superAdmin/student/service/Student.service";
-import { StudentRepository } from "../superAdmin/student/repository/Student.repository";
-import { AdmissionPatternController } from "../admissionPattern/controller/AdmissionPattern.controller";
-import { AdmissionPatternService } from "../admissionPattern/service/AdmissionPattern.service";
-import { AdmissionPatternRepository } from "../admissionPattern/repository/AdmissionPattern.repo";
-import { AcademicYearController } from "../academicYear/controller/AcademicYear.controller";
-import { AcademicYearService } from "../academicYear/service/Academic.service";
-import { AcademicYearRepository } from "../academicYear/repository/Academic.repo";
-import { AdminController } from "../admin/controller/Admin.controller";
-import { constants } from "node:buffer";
-import { AdminService } from "../admin/service/Admin.service";
-import { AdminRepository } from "../admin/repository/Admin.repo";
+import { BrandController } from "../modules/brand/controller/brand.controller";
+import { BrandService } from "../modules/brand/service/brand.servcie";
+import { BrandRepository } from "../modules/brand/repo/brand.repo";
+import { CategoryController } from "../modules/category/controller/category.controller";
+import { CategoryRepository } from "../modules/category/repo/category.repo";
+import { register } from "module";
+import { CategoryService } from "../modules/category/service/category.service";
+import { ProductController } from "../modules/products/controller/product.controller";
+import { ProductService } from "../modules/products/service/product.servcie";
+import { ProductRepository } from "../modules/products/repository/product.repo";
 
 
 container.register("CommonRepository", {
   useClass: CommonRepository,
-});
-
-//staff
-container.register("AddStaffController", {
-  useClass: AddStaffController,
-});
-
-container.register("StaffService",
-  {
-    useClass: AddStaffService,
-  }
-);
-
-container.register("StaffRepository", {
-  useClass: StaffRepository,
-});
-
-container.register("StaffCodeGenerator", {
-  useClass: StaffCodeGenerator,
-});
-
-container.register("EmailService", {
-  useClass: EmailService,
 });
 
 //globalexpection 
@@ -55,57 +23,49 @@ container.register("GlobalExpection", {
   useClass: GlobalException
 })
 
-container.register("StudentController", {
-  useClass: StudentController
-})
+//product
 
-container.register("StudentService", {
-  useClass: StudentService
-})
-
-container.register("StudentRepository", {
-  useClass: StudentRepository
+container.register("productController", {
+  useClass:ProductController
 })
 
 
-//admissionpattern
-
-container.register("admissionPatternController", {
-  useClass: AdmissionPatternController
-})
-
-container.register("admissionPatternService", {
-  useClass: AdmissionPatternService
-})
-
-container.register("admissionPatternRepository", {
-  useClass: AdmissionPatternRepository
+container.register("productService",{
+  useClass:ProductService
 })
 
 
-container.register("academicYearController", {
-  useClass: AcademicYearController
+container.register("productRepository",{
+  useClass:ProductRepository
 })
 
-container.register("academicYearService", {
-  useClass: AcademicYearService
+
+//brand
+
+container.register("brandController",{
+  useClass:BrandController
 })
 
-container.register("academicYearRepository", {
-  useClass: AcademicYearRepository
+container.register("brandService",{
+  useClass:BrandService
 })
 
-//admin
 
-container.register("admincontroller", {
-  useClass: AdminController
+container.register("brandRepository",{
+  useClass:BrandRepository
 })
 
-container.register("adminService", {
-  useClass: AdminService
+//category
+
+container.register("categoryController",{
+  useClass:CategoryController
 })
 
-container.register("adminRepository", {
-  useClass: AdminRepository
+container.register("categoryService",{
+  useClass:CategoryService
 })
 
+
+container.register("categoryRepository",{
+  useClass:CategoryRepository
+})

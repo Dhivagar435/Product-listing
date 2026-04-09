@@ -4,7 +4,7 @@ import path from "path";
 const swaggerDefinition = {
   openapi: "3.0.0",
   info: {
-    title: "School Project",
+    title: "Product Listing",
     version: "1.0.0",
     description: "My API Description",
   },

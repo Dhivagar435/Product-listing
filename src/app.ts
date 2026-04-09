@@ -3,23 +3,25 @@ import express from "express";
 import "./inversionOfControl/di-container";
 import cors, { CorsOptions } from "cors";
 import compression from "compression";
-import path from "path";
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./config/swaggerconfiguration");
 import dotenv from "dotenv";
 import { globalErrorHandler } from "./constant/error/Global.error";
+
 dotenv.config();
 
-//staffmanagement
-import staffManagementRoutes from "./superAdmin/staff/routes/Staff.routes"
+//brand
 
-//admissionPattern 
+import brandRoutes from "./modules/brand/routes/brand.routes";
 
-import admissionPattern from "./admissionPattern/routes/AdmissionPatternRoutes"
+//category
 
-//academicYear
+import categoryRoutes from "./modules/category/routes/category.routes";
 
-import academicyear from "./academicYear/routes/Academic.routes"
+
+//product
+
+import productRoutes from "./modules/products/routes/product.routes";
 
 
 const app = express();
@@ -75,16 +77,18 @@ app.options(/.*/, cors(corsOptions));
 app.set("trust proxy", true);
 
 
-//staffmanagement
-app.use("/api/v1/staff", staffManagementRoutes)
+//brand
+app.use("/api/brands", brandRoutes)
 
 
-//admissionpattern
+//category
 
-app.use("/api/v1/admissionPattern", admissionPattern)
+app.use("/api/categories", categoryRoutes)
 
-//academicyear
-app.use("/api/v1/academicYear", academicyear)
+
+//product
+
+app.use("/api/products", productRoutes)
 
 
 app.use(globalErrorHandler);

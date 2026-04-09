@@ -1,11 +1,12 @@
-import { DataSource } from "typeorm";
+import { DataSource, In } from "typeorm";
 import dotenv from "dotenv";
-import { Student } from "../superAdmin/student/entity/Student.entity";
-import { Staff } from "../superAdmin/staff/entity/StaffEntity";
-import { StaffDetails } from "../superAdmin/staff/entity/StaffDetailsEntity";
-import { AdmissionPattern } from "../admissionPattern/entity/AdmissionPatternEntity";
-import { AcademicYear } from "../academicYear/entity/AcademicYear.entity";
-import { StudentDetail } from "../superAdmin/student/entity/StudentDetails.entity";
+import { Review } from "../modules/review/entity/review.entity";
+import { Product } from "../modules/products/entity/product.entity";
+import { Category } from "../modules/category/entity/category.entity";
+import { Brand } from "../modules/brand/entity/brand.entity";
+import { Inventory } from "../modules/inventory/entity/inventory.entity";
+import { ProductVariant } from "../modules/products/entity/productVarient";
+
 
 dotenv.config({ debug: false });
 export const AppDataSource = new DataSource({
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
-  entities: [Staff, StaffDetails,Student, AdmissionPattern, AcademicYear, StudentDetail],
+  entities: [Brand, Category, Product, Review ,Inventory, ProductVariant],
   extra: {
     connectionLimit: Number(process.env.DB_POOL_LIMIT),
     connectTimeout: Number(process.env.DB_TIMEOUT),
