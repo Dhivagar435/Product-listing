@@ -93,7 +93,7 @@ app.use("/api/products", productRoutes)
 app.use(globalErrorHandler);
 
 app.get("/", (req, res) => {
-  res.send("SCHOOL BACKEND");
+  res.send("Products List");
 });
 
 export default app;
