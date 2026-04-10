@@ -25,7 +25,6 @@ export class ProductController {
                 discountPrice,
                 discountPercentage,
                 isActive,
-                images,
                 categoryId,
                 brandId,
                 createdBy } = req.body
@@ -62,6 +61,8 @@ export class ProductController {
                 createdBy
             } = DataSanitize.sanitize({ name, description, sku, price, discountPrice, discountPercentage, isActive, categoryId, brandId, createdBy }));
 
+            isActive = isActive === true || isActive === 'true';
+
             const productDTO = new AddProductDto(name, description, sku, price, isActive, imageNames, categoryId, brandId, createdBy, discountPrice, discountPercentage,)
             const result = await this.productService.addProduct(productDTO);
             return ApiResponse.success(res, "PRODUCT CREATED", result);
@@ -78,8 +79,9 @@ export class ProductController {
             const page = Number(req.query.page) || 1;
             const limit = Number(req.query.limit) || 10;
             const q = (req.query.q as string) || "";
+            const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
 
-            const result = await this.productService.getProducts(page, limit, q);
+            const result = await this.productService.getProducts(page, limit, q,categoryId);
 
             return ApiResponse.success(res, "PRODUCTS FETCHED", result);
 
@@ -151,6 +153,7 @@ export class ProductController {
             }));
 
             const updateProductDtO = new UpdateProductDto(Number(id), name, description, price, isActive, imageNames, categoryId, brandId, updatedBy, discountPrice, discountPercentage)
+            isActive = isActive === true || isActive === 'true';
 
             const result = await this.productService.updateProduct(updateProductDtO);
 

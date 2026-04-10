@@ -69,10 +69,10 @@ export class ProductService {
         }
     };
 
-    getProducts = async (page: number, limit: number, q: string) => {
+    getProducts = async (page: number, limit: number, q: string,categoryId?: number) => {
         try {
 
-            const result = await this.productRepository.getProducts(page, limit, q);
+            const result = await this.productRepository.getProducts(page, limit, q,categoryId);
 
             if (!result.data || result.data.length === 0) {
                 return {

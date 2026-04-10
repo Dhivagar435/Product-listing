@@ -34,7 +34,7 @@ export class ProductRepository {
         return await this.repo.save(product);
     };
 
-    getProducts = async (page: number, limit: number, q: string) => {
+    getProducts = async (page: number, limit: number, q: string, categoryId: number) => {
 
         const query = this.repo.createQueryBuilder("product")
             .leftJoinAndSelect("product.category", "category")
@@ -47,6 +47,10 @@ export class ProductRepository {
                 `(LOWER(product.name) LIKE LOWER(:q) OR LOWER(product.description) LIKE LOWER(:q))`,
                 { q: `%${q}%` }
             );
+        }
+
+        if (categoryId) {
+            query.andWhere("category.id = :categoryId", { categoryId });
         }
 
         const [data, total] = await query

@@ -3,8 +3,8 @@ import express from "express";
 import "./inversionOfControl/di-container";
 import cors, { CorsOptions } from "cors";
 import compression from "compression";
-const swaggerUI = require("swagger-ui-express");
-const swaggerSpec = require("./config/swaggerconfiguration");
+// import swaggerUI from "swagger-ui-express";
+import swaggerSpec from "./config/swaggerconfiguration";
 import dotenv from "dotenv";
 import path from 'path';
 import { globalErrorHandler } from "./constant/error/Global.error";
@@ -25,20 +25,9 @@ import categoryRoutes from "./modules/category/routes/category.routes";
 import productRoutes from "./modules/products/routes/product.routes";
 
 
+
 const app = express();
-app.use(compression());
 
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.use(
-  "/api-docs",
-  swaggerUI.serve,
-  swaggerUI.setup(swaggerSpec, {
-    explorer: true,
-  })
-);
 
 const allowedOrigins: string[] =
   process.env.ALLOWED_ORIGINS?.split(",").map(o => o.trim()) ?? [];
@@ -57,8 +46,6 @@ const corsOptions: CorsOptions = {
   allowedHeaders: [
     "Content-Type",
     "Authorization",
-    "X-Request-ID",
-    "Idempotency-Key",
   ],
   credentials: true,
 };
@@ -66,6 +53,18 @@ const corsOptions: CorsOptions = {
 
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
+app.use(compression());
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+
+// add this BEFORE routes
+// app.use("/api/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpec, { explorer: true }));
+
+
 
 app.set("trust proxy", true);
 

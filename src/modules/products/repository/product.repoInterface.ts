@@ -9,5 +9,5 @@ export interface ProductRepoInterface {
     updateProduct(product:Product,productDTO: UpdateProductDto,category:Category,brand:Brand): Promise<any>;
     deleteProduct(productId: number): Promise<any>;
     getProductById(productId: number): Promise<any>;
-    getProducts(page: number, limit: number, q: string): Promise<any>;
+    getProducts(page: number, limit: number, q: string,categoryId?: number): Promise<any>;
 }

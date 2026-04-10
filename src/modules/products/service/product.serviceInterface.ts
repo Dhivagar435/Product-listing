@@ -7,5 +7,5 @@ export interface ProductServiceInterface {
     updateProduct(productDTO:UpdateProductDto): Promise<any>;
     deleteProduct(productId: number): Promise<any>;
     getProductById(productId: number): Promise<any>;
-    getProducts(page:number,limit:number,q:string): Promise<any>;
+    getProducts(page:number,limit:number,q:string,categoryId?: number): Promise<any>;
 }
