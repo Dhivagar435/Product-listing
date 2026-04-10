@@ -30,13 +30,15 @@ export class ProductController {
                 brandId,
                 createdBy } = req.body
 
+            const files = req.files as Express.Multer.File[];
+
+            const imageNames = files?.map((file) => file.filename) || [];
+
             const missingFields = [
                 "name",
                 "description",
                 "sku",
                 "price",
-                "isActive",
-                "images",
                 "categoryId",
                 "brandId",
                 "createdBy"].filter(field => req.body[field] === undefined || req.body[field] === null)
@@ -55,13 +57,12 @@ export class ProductController {
                 discountPrice,
                 discountPercentage,
                 isActive,
-                images,
                 categoryId,
                 brandId,
                 createdBy
-            } = DataSanitize.sanitize({ name, description, sku, price, discountPrice, discountPercentage, isActive, images, categoryId, brandId, createdBy }));
+            } = DataSanitize.sanitize({ name, description, sku, price, discountPrice, discountPercentage, isActive, categoryId, brandId, createdBy }));
 
-            const productDTO = new AddProductDto(name, description, sku, price, isActive, images, categoryId, brandId, createdBy, discountPrice, discountPercentage,)
+            const productDTO = new AddProductDto(name, description, sku, price, isActive, imageNames, categoryId, brandId, createdBy, discountPrice, discountPercentage,)
             const result = await this.productService.addProduct(productDTO);
             return ApiResponse.success(res, "PRODUCT CREATED", result);
         }
@@ -115,7 +116,6 @@ export class ProductController {
                 discountPrice,
                 discountPercentage,
                 isActive,
-                images,
                 categoryId,
                 brandId,
                 updatedBy
@@ -125,6 +125,9 @@ export class ProductController {
                 return ApiResponse.error(res, "ID is required", 400);
             }
 
+            const files = req.files as Express.Multer.File[];
+            const imageNames = files?.map((file) => file.filename) || [];
+
             ({
                 name,
                 description,
@@ -132,7 +135,6 @@ export class ProductController {
                 discountPrice,
                 discountPercentage,
                 isActive,
-                images,
                 categoryId,
                 brandId,
                 updatedBy
@@ -143,13 +145,12 @@ export class ProductController {
                 discountPrice,
                 discountPercentage,
                 isActive,
-                images,
                 categoryId,
                 brandId,
                 updatedBy
             }));
 
-            const updateProductDtO = new UpdateProductDto(Number(id), name, description, price, isActive, images, categoryId, brandId, updatedBy, discountPrice, discountPercentage)
+            const updateProductDtO = new UpdateProductDto(Number(id), name, description, price, isActive, imageNames, categoryId, brandId, updatedBy, discountPrice, discountPercentage)
 
             const result = await this.productService.updateProduct(updateProductDtO);
 

@@ -6,6 +6,7 @@ import compression from "compression";
 const swaggerUI = require("swagger-ui-express");
 const swaggerSpec = require("./config/swaggerconfiguration");
 import dotenv from "dotenv";
+import path from 'path';
 import { globalErrorHandler } from "./constant/error/Global.error";
 
 dotenv.config();
@@ -52,7 +53,7 @@ const corsOptions: CorsOptions = {
       callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ["GET", "POST", "PUT", "PATCH", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Content-Type",
     "Authorization",
@@ -61,20 +62,19 @@ const corsOptions: CorsOptions = {
   ],
   credentials: true,
 };
-app.use((req, res, next) => {
-  if (!req.path.startsWith("/v1/uploads")) {
-    res.setHeader("Content-Type", "application/json");
-  }
 
-  res.setHeader("Cache-Control", "no-store");
-
-  next();
-});
 
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 
 app.set("trust proxy", true);
+
+// const uploadsPath = path.resolve(__dirname, '../uploads');
+
+const uploadsPath = path.join(process.cwd(), "uploads");
+
+
+app.use("/api/uploads", express.static(uploadsPath));
 
 
 //brand

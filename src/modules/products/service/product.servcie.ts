@@ -21,7 +21,7 @@ export class ProductService {
     addProduct = async (productDTO: AddProductDto) => {
         try {
 
-            //check category
+           
             const category = await this.commonRepository.findActiveRecord(
                 "category_tbl",
                 "id",
@@ -32,7 +32,7 @@ export class ProductService {
                 throw new AppError("Category not found", 404);
             }
 
-            //check brand
+          
             const brand = await this.commonRepository.findActiveRecord(
                 "brand_tbl",
                 "id",
@@ -43,7 +43,7 @@ export class ProductService {
                 throw new AppError("Brand not found", 404);
             }
 
-            // check duplicate SKU
+           
             const existing = await this.commonRepository.findActiveRecord(
                 "products_tbl",
                 "sku",
