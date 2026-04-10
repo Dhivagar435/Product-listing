@@ -2,9 +2,7 @@ import { Column, Entity, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn 
 import { Crud } from "../../../common/entity/Crud.entity";
 import { Category } from "../../category/entity/category.entity";
 import { Brand } from "../../brand/entity/brand.entity";
-import { Inventory } from "../../inventory/entity/inventory.entity";
-import { Review } from "../../review/entity/review.entity";
-import { ProductVariant } from "./productVarient";
+
 
 @Entity("products_tbl")
 export class Product {
@@ -46,15 +44,6 @@ export class Product {
 
     @ManyToOne(() => Brand, (brand) => brand.products, { eager: true })
     brand!: Brand;
-
-    @OneToOne(() => Inventory, (inventory) => inventory.product, { cascade: true, eager: true })
-    inventory!: Inventory;
-
-    @OneToMany(() => Review, (review) => review.product)
-    reviews!: Review[];
-
-    @OneToMany(() => ProductVariant, (variant) => variant.product)
-    variants!: ProductVariant[];
 
     @Column(() => Crud, { prefix: false })
     Cruds!: Crud;

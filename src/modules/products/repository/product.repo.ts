@@ -79,20 +79,21 @@ export class ProductRepository {
         category: Category,
         brand: Brand
     ) => {
-
-        //update only if value exists
         if (dto.getName() !== undefined) product.name = dto.getName();
         if (dto.getDescription() !== undefined) product.description = dto.getDescription();
         if (dto.getPrice() !== undefined) product.price = dto.getPrice();
         if (dto.getDiscountPrice() !== undefined) product.discountPrice = dto.getDiscountPrice() ?? null;
         if (dto.getDiscountPercentage() !== undefined) product.discountPercentage = dto.getDiscountPercentage() ?? null;
         if (dto.getIsActive() !== undefined) product.isActive = dto.getIsActive();
-        if (dto.getImages() !== undefined) product.images = dto.getImages();
 
-        // relations
+
+        if (dto.getImages() !== undefined && dto.getImages().length > 0) {
+            product.images = dto.getImages();
+        }
+
+
         product.category = category;
         product.brand = brand;
-
         product.Cruds.updatedBy = dto.getUpdatedBy();
 
         return await this.repo.save(product);

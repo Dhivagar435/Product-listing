@@ -15,7 +15,7 @@ export class ProductController {
     constructor(@inject("productService") private productService: ProductServiceInterface) { }
 
     addProduct = async (req: Request, res: Response, next: NextFunction) => {
-        console.log(req.body, "addproductbodyyy")
+
         try {
             let {
                 name,
@@ -28,6 +28,8 @@ export class ProductController {
                 categoryId,
                 brandId,
                 createdBy } = req.body
+
+            console.log(req.body, "addproductbodyyy")
 
             const files = req.files as Express.Multer.File[];
 
@@ -81,7 +83,7 @@ export class ProductController {
             const q = (req.query.q as string) || "";
             const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
 
-            const result = await this.productService.getProducts(page, limit, q,categoryId);
+            const result = await this.productService.getProducts(page, limit, q, categoryId);
 
             return ApiResponse.success(res, "PRODUCTS FETCHED", result);
 
@@ -107,62 +109,54 @@ export class ProductController {
         }
     };
 
-    updateProduct = async (req: Request, res: Response, next: NextFunction) => {
-        try {
-            const { id } = req.params;
+updateProduct = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
 
-            let {
-                name,
-                description,
-                price,
-                discountPrice,
-                discountPercentage,
-                isActive,
-                categoryId,
-                brandId,
-                updatedBy
-            } = req.body;
+        let {
+            name, description, price, discountPrice,
+            discountPercentage, isActive, categoryId, brandId, updatedBy,
+            existingImages, deletedImages
+        } = req.body;
 
-            if (!id) {
-                return ApiResponse.error(res, "ID is required", 400);
-            }
-
-            const files = req.files as Express.Multer.File[];
-            const imageNames = files?.map((file) => file.filename) || [];
-
-            ({
-                name,
-                description,
-                price,
-                discountPrice,
-                discountPercentage,
-                isActive,
-                categoryId,
-                brandId,
-                updatedBy
-            } = DataSanitize.sanitize({
-                name,
-                description,
-                price,
-                discountPrice,
-                discountPercentage,
-                isActive,
-                categoryId,
-                brandId,
-                updatedBy
-            }));
-
-            const updateProductDtO = new UpdateProductDto(Number(id), name, description, price, isActive, imageNames, categoryId, brandId, updatedBy, discountPrice, discountPercentage)
-            isActive = isActive === true || isActive === 'true';
-
-            const result = await this.productService.updateProduct(updateProductDtO);
-
-            return ApiResponse.success(res, "PRODUCT UPDATED", result);
-
-        } catch (error) {
-            next(error);
+        if (!id) {
+            return ApiResponse.error(res, "ID is required", 400);
         }
-    };
+
+        //parse isActive to boolean BEFORE passing to DTO
+        const parsedIsActive: boolean = isActive === true || isActive === 'true' || isActive === '1';
+
+        const files = req.files as Express.Multer.File[];
+        const newImageNames = files?.map((file) => file.filename) || [];
+
+        //merge existing + new images
+        const parsedExisting: string[] = existingImages ? JSON.parse(existingImages) : [];
+        const parsedDeleted: string[] = deletedImages ? JSON.parse(deletedImages) : [];
+
+        const mergedImages: string[] = [
+            ...parsedExisting.filter((img: string) => !parsedDeleted.includes(img)),
+            ...newImageNames
+        ];
+
+        ({ name, description, price, discountPrice, discountPercentage, categoryId, brandId, updatedBy } 
+            = DataSanitize.sanitize({ name, description, price, discountPrice, discountPercentage, categoryId, brandId, updatedBy }));
+
+        // Now DTO gets correct boolean and merged images
+        const updateProductDtO = new UpdateProductDto(
+            Number(id), name, description, price,
+            parsedIsActive, 
+            mergedImages,  
+            categoryId, brandId, updatedBy, discountPrice, discountPercentage
+        );
+
+        const result = await this.productService.updateProduct(updateProductDtO);
+
+        return ApiResponse.success(res, "PRODUCT UPDATED", result);
+
+    } catch (error) {
+        next(error);
+    }
+};
 
     deleteProduct = async (req: Request, res: Response, next: NextFunction) => {
         try {
