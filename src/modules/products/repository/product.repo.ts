@@ -69,7 +69,7 @@ export class ProductRepository {
                 id,
                 Cruds: { isDeleted: 0 }
             },
-            relations: ["category", "brand", "reviews", "inventory"]
+            relations: ["category", "brand"]
         });
     };
 

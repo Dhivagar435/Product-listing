@@ -154,6 +154,7 @@ updateProduct = async (req: Request, res: Response, next: NextFunction) => {
         return ApiResponse.success(res, "PRODUCT UPDATED", result);
 
     } catch (error) {
+        console.log(error, "update controller error");
         next(error);
     }
 };

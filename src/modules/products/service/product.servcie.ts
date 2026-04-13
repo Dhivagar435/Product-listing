@@ -47,7 +47,7 @@ export class ProductService {
             const existing = await this.commonRepository.findActiveRecord(
                 "products_tbl",
                 "sku",
-                { sku: productDTO.getSku() }
+                { sku: productDTO.getSku(), isDeleted: 0 }
             );
 
             if (existing) {
@@ -151,6 +151,7 @@ export class ProductService {
         return updated;
 
     } catch (err) {
+        console.log(err, "update_product_service");
         if (err instanceof AppError) throw err;
         throw new AppError("Failed to update product", 500, err);
     }

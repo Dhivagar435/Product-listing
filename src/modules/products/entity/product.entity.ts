@@ -33,11 +33,11 @@ export class Product {
     @Column("simple-array", { nullable: true })
     images!: string[];
 
-    @Column({ type: "float", default: 0 })
-    rating!: number;
+    // @Column({ type: "float", default: 0 })
+    // rating!: number;
 
-    @Column({ default: 0 })
-    reviewCount!: number;
+    // @Column({ default: 0 })
+    // reviewCount!: number;
 
     @ManyToOne(() => Category, (category) => category.products, { eager: true })
     category!: Category;

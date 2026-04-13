@@ -16,6 +16,7 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: true,
   logging: false,
+    ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
   entities: [Brand, Category, Product],
   extra: {
     connectionLimit: Number(process.env.DB_POOL_LIMIT),
